@@ -1,0 +1,31 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row  mt-5">
+    <div class="col-md-3 col-sm-6">
+      <a href="#" class="btn btn-light">Back To Feed</a>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-3">
+    <div class="col-md-5 col-sm-12">
+      {% if profile.name %}
+        <h5>Followers for {{profile.name}}</h5>
+      {% else %}
+        <h5>Followers for @{{profile.user.username}}</h5>
+      {% endif %}
+    </div>
+  </div>
+  {% for follower in followers %}
+  <div class="row justify-content-center">
+    <div class="col-md-5 col-sm-12 position-relative my-3">
+      <a href="#">
+        <img src="" alt="" class="rounded-circle post-img" height="60" width="60">
+      </a>
+      <a href="#"><h5>@{{follower.username}}</h5></a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock content %}
