@@ -77,7 +77,29 @@ class PostDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
   def test_func(self):
     post = self.get_object()
     return self.request.user == post.author
+  
 
+class Profile(View):
+  def get(self, request, pk, *args, **kwargs):
+    profile = UserProfile.objects.get(pk=pk)
+    user = profile.user
+    posts = Post.objects.filter(author=user)
+
+    context = {'profile': profile, 'user': user, 'posts': posts}
+    return render(request, 'social/profile.html', context)
+
+class ProfileEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+  model = UserProfile
+  fields = ['picture', 'name', 'location', 'birth_date', 'bio']
+  template_name = 'social/profile_edit.html'
+
+  def get_success_url(self):
+    pk = self.kwargs['pk']
+    return reverse_lazy('profile', kwargs={'pk': pk})
+  
+  def test_func(self):
+    profile = self.get_object()
+    return self.request.user == profile.user
 # class PostList(View):
 #   def get(self, request, *args, **kwargs):
 #     posts = Post.objects.filter(
